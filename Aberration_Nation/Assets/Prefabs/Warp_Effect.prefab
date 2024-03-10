@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4656751449116827130}
   - component: {fileID: 3631398319603370174}
   - component: {fileID: 6764001969578738360}
+  - component: {fileID: 6679477123518737539}
+  - component: {fileID: 8147683258130356826}
   m_Layer: 0
   m_Name: Warp_Effect
   m_TagString: Untagged
@@ -4830,3 +4832,39 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!136 &6679477123518737539
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338552218093360599}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.725
+  m_Height: 3.4500008
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8147683258130356826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338552218093360599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 642b90784466cea469821f50b561d604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  col: {fileID: 0}

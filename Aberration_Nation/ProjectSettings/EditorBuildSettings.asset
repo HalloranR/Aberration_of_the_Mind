@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/IntroQuoteScene.unity
+    guid: b4f770b6e98936346b5c4e9720e0d500
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: d24e0aa805721ef4ba4ee9c2a6acef73
+  - enabled: 1
     path: Assets/Scenes/SpookyScene.unity
     guid: 3b3120f9df85ac445b894f51254d712c
   m_configObjects: {}
