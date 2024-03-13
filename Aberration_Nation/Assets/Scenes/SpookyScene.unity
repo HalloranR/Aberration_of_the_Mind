@@ -571,6 +571,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3715016391304312418, guid: d580dd24ea567f7498cc2129ed6a75da, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: cb12ad285d833e14b94998797cc682f4, type: 3}
     - target: {fileID: 3761402834185815595, guid: d580dd24ea567f7498cc2129ed6a75da, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1001,12 +1005,16 @@ PrefabInstance:
       value: Player_Character
       objectReference: {fileID: 0}
     - target: {fileID: 4442070891214634585, guid: 33867e98bac2632478b245f739948dbc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4442070891214634585, guid: 33867e98bac2632478b245f739948dbc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.27
       objectReference: {fileID: 0}
     - target: {fileID: 4442070891214634585, guid: 33867e98bac2632478b245f739948dbc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.03
+      value: -1.23
       objectReference: {fileID: 0}
     - target: {fileID: 4442070891214634585, guid: 33867e98bac2632478b245f739948dbc, type: 3}
       propertyPath: m_LocalPosition.z

@@ -21,6 +21,9 @@ public class TextAnimator : MonoBehaviour
     public float fade_in_rate = 1f;
     public float fade_out_rate = 1f;
 
+    [Header("Audio Components")]
+    public AudioSource turn_on;
+
 
     void Start()
     {
@@ -41,6 +44,8 @@ public class TextAnimator : MonoBehaviour
         StartCoroutine(FadeOut(author));
         StartCoroutine(FadeOut(quote));
         Debug.Log("Step5");
+
+        turn_on.Play();
 
         yield return new WaitForSeconds(change_scene_wait);
         SceneManager.LoadScene(1);
