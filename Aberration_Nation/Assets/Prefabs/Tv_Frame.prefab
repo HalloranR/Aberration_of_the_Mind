@@ -176,12 +176,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Movement: A, W, S, D
 
-    Change Channe: Q, E
+    Change Channel: Q, E
 
     Actions: Space Bar
 
     Exit
-    Pause: ESC
+    Pause: M
 
 '
   m_isRightToLeft: 0

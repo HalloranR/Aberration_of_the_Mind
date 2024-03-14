@@ -12,9 +12,13 @@ public class PlayerController : MonoBehaviour
     [Header("Movement vars")]
     public float moveSpeed = 5;
     public float sprintSpeed = 5;
+    public float jumpHeight = 5;
+    public float gravity;
 
-    [Header("Rotation Speed")]
-    public float rotationSpeed = 90;
+    [Header("Look Sensetivity")]
+    public float xSensetivity = 90;
+    public float ySensetivity = 90f;
+    public float clamp = 85f;
 
     [Header("Transforms")]
     public Transform camTransform;
@@ -28,13 +32,22 @@ public class PlayerController : MonoBehaviour
     [Header("Menu Location")]
     public GameObject Menu;
 
-    [Header("Player Location")]
-    static Vector3 location = new Vector3(0f, 0f, 0f);
+    [Header("Ground Detection")]
+    public LayerMask groundMask;
+    public float sphereRadius;
+
+    [Header("Static Player Vars")]
+    static Vector3 location = new Vector3(100f, 100f, 100f);
+    static Vector3 rotation = Vector3.zero;
+    static Vector3 velocity = Vector3.zero;
 
     private Rigidbody rb;
-    private float currentMovement;
-    private float currentRotation;  
+    private Vector2 currentMovement;
+    private float currentJump = 0;
     private bool paused = false;
+    private bool grounded = true;
+    private float changeX;
+    private float changeY;
 
 
     //enable and disable unity new input system
@@ -52,6 +65,8 @@ public class PlayerController : MonoBehaviour
     {
         //grab some vars
         rb = GetComponent<Rigidbody>();
+        rb.velocity = velocity;
+        //rb.rotation = rotation;
 
         rb.position = location;
     }
@@ -64,17 +79,41 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        Debug.Log(currentRotation.ToString() + ", " + currentMovement.ToString());
+        grounded = Physics.CheckSphere(rb.position, sphereRadius, groundMask);
+
+        //Debug.Log("Position: " + rb.position.ToString());
+        //Debug.Log("Velocity: " + rb.velocity.ToString());
+
+
+        float y_velocity = rb.velocity.y;
+
+        //Debug.Log(y_velocity);
+        if (grounded)
+        {
+            y_velocity = currentJump;
+        }
+        else
+        {
+            y_velocity += -gravity * Time.deltaTime;
+            currentJump = 0f;
+        }
 
         //move the player
-        rb.velocity = transform.forward * moveSpeed * currentMovement;
+        rb.velocity = transform.right * currentMovement.x * moveSpeed + transform.up * y_velocity + transform.forward *  currentMovement.y * moveSpeed;
 
-        //rotate the player only around the y axis
-        transform.Rotate(new Vector3(0, rotationSpeed * Time.deltaTime * currentRotation, 0));
+        //rotate the camera only around the 
+        rb.transform.Rotate(Vector3.up * xSensetivity * changeX * Time.deltaTime);
 
-        print(rb.velocity.ToString() + ", " + rb.rotation.ToString());
+        float xRotation = -changeY * Time.deltaTime * ySensetivity;
+        xRotation = Mathf.Clamp(xRotation, -clamp, clamp);
+        //Debug.Log(xRotation);
+        Vector3 newRotation = rb.transform.eulerAngles;
+        newRotation.x = xRotation;
+        //Debug.Log(newRotation);
+        //camTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        //camTransform.eulerAngles = newRotation;
     }
 
 
@@ -85,7 +124,10 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-
+        if (grounded)
+        {
+            currentJump = jumpHeight;
+        }
     }
 
 
@@ -110,9 +152,27 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Set the rotation value for the player
     /// </summary>
-    public void RotatePlayer(InputAction.CallbackContext context)
+    public void RotateX(InputAction.CallbackContext context)
     {
-        currentRotation = context.ReadValue<float>();
+        if(paused == false)
+        {
+            changeX = context.ReadValue<float>();
+        }
+    }
+
+    /// <summary>
+    /// Set the rotation value for the player
+    /// </summary>
+    public void RotateY(InputAction.CallbackContext context)
+    {
+        if (paused == false)
+        {
+            if (context.ReadValue<float>() != 0)
+            {
+                changeY = context.ReadValue<float>();
+                Debug.Log(changeY);
+            }
+        }
     }
 
     /// <summary>
@@ -120,7 +180,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void MovePlayer(InputAction.CallbackContext context)
     {
-        currentMovement = context.ReadValue<float>();
+        if(paused == false)
+        {
+            currentMovement = context.ReadValue<Vector2>();
+            Debug.Log(currentMovement.ToString());
+        }
     }
 
     /// <summary>
@@ -129,39 +193,43 @@ public class PlayerController : MonoBehaviour
     /// <param name="context"></param>
     public void ChangeChannel(InputAction.CallbackContext context)
     {
-        location = rb.position;
+        if (paused == false)
+        {
+            location = rb.position;
 
-        int value = 0;
-        if(context.ReadValue<float>() > 0) { value = 1; }
-        else { value = -1; }
+            int value = 0;
+            if (context.ReadValue<float>() > 0) { value = 1; }
+            else { value = -1; }
 
-        int cur_scene = SceneManager.GetActiveScene().buildIndex;
+            int cur_scene = SceneManager.GetActiveScene().buildIndex;
 
-        int next_channel = System.Array.IndexOf(channels, cur_scene);
+            int next_channel = System.Array.IndexOf(channels, cur_scene);
 
-        next_channel += value;
+            next_channel += value;
 
-        //have the next channel value wrap around
-        if (next_channel <= -1) { next_channel = channels.Length-1; }
-        else if(next_channel >= channels.Length) {  next_channel = 0; }
+            //have the next channel value wrap around
+            if (next_channel <= -1) { next_channel = channels.Length - 1; }
+            else if (next_channel >= channels.Length) { next_channel = 0; }
 
-        SceneManager.LoadScene(channels[next_channel]);
+            SceneManager.LoadScene(channels[next_channel]);
+        }
     }
 
-
-    public void LookAround(InputAction.CallbackContext context)
-    {
-
-    }
 
     public void DoAction(InputAction.CallbackContext context)
     {
-        if(SceneManager.GetActiveScene().buildIndex == 2) { }
-        else if(SceneManager.GetActiveScene().buildIndex == 3) { }
-        else if(SceneManager.GetActiveScene().buildIndex == 4) { }
-        else if(SceneManager.GetActiveScene().buildIndex == 5) { }
+        Debug.Log("JUmp");
+        if(paused == false)
+        {
+            if (SceneManager.GetActiveScene().buildIndex == 2) { Jump();  }
+            else if (SceneManager.GetActiveScene().buildIndex == 3) { }
+            else if (SceneManager.GetActiveScene().buildIndex == 4) { }
+        }
     }
 
+    /// <summary>
+    /// Toggles the main menu
+    /// </summary>
     public void OpenOrCloseMenu()
     {
         if (paused == false)

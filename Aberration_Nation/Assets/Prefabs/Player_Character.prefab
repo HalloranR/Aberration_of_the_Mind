@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1728948300911359730}
   - component: {fileID: 759863503678947223}
   - component: {fileID: 8599355906424089895}
+  - component: {fileID: 4350796393326579030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -31,7 +32,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8386896958087577097}
   m_Father: {fileID: 4442070891214634585}
   m_LocalEulerAnglesHint: {x: 3, y: 0, z: 0}
 --- !u!20 &1728948300911359730
@@ -137,6 +139,15 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!45 &4350796393326579030
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790500727217795084}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 0}
 --- !u!1 &3046511541825239209
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +184,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1726114129828008713}
-  - {fileID: 8386896958087577097}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5815708176493279945
@@ -259,7 +269,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -271,7 +281,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -288,9 +298,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4956c0cbb3448514da5d60d85097f161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  sprintSpeed: 5
-  rotationSpeed: 30
+  moveSpeed: 10
+  sprintSpeed: 20
+  jumpHeight: 10
+  gravity: 20
+  xSensetivity: 90
+  ySensetivity: 90
+  clamp: 85
   camTransform: {fileID: 1726114129828008713}
   playerControls:
     m_Name: Player Controls
@@ -303,6 +317,10 @@ MonoBehaviour:
     m_Flags: 0
   channels: 0200000003000000
   Menu: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  sphereRadius: 2
 --- !u!114 &5570453961067156248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,7 +366,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4801262618445569513}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: RotatePlayer
+        m_MethodName: RotateX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -417,11 +435,19 @@ MonoBehaviour:
     m_ActionId: 4b20eb30-c3fa-45bc-b272-443f17bbfed3
     m_ActionName: Player/Change_Channel[/Keyboard/q,/Keyboard/e]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 03c79ef4-cb22-4a0e-9d31-5a1c6c54920c
-    m_ActionName: Player/Look[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4801262618445569513}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: DoAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: cb1b8d58-9add-49a9-84fd-20bcbd84217c
     m_ActionName: Player/Action[/Keyboard/space]
   - m_PersistentCalls:
@@ -440,6 +466,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f358a637-1ed3-44e4-af42-bf1695cb4dc1
     m_ActionName: Player/Main_Menu[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4801262618445569513}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: RotateY
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6634a275-4d49-49d6-a9d0-33c5aacd1246
+    m_ActionName: Player/MouseY[/Mouse/delta/y]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -682,14 +724,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8517450268249800491}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.5, y: -0.3, z: 0}
-  m_LocalScale: {x: 0.20000002, y: 1, z: 0.2}
+  m_LocalRotation: {x: 0.6883546, y: -0, z: -0, w: 0.72537434}
+  m_LocalPosition: {x: 0.5, y: -0.29958886, z: 0.015700772}
+  m_LocalScale: {x: 0.20000002, y: 2.2, z: 0.20000003}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2521216099916798557}
   - {fileID: 4047258173911819885}
-  m_Father: {fileID: 4442070891214634585}
+  m_Father: {fileID: 1726114129828008713}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &6088966278360226765
 MeshFilter:
