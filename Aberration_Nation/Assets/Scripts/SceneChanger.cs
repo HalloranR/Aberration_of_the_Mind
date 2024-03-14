@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -8,6 +10,11 @@ public class SceneChanger : MonoBehaviour
 {
     [Header("Channel Scene IDs")]
     public int[] channels;
+
+    [Header("Menu Location")]
+    public GameObject Menu;
+
+    private bool paused = false;
 
     public void ChangeChannel(InputAction.CallbackContext context)
     {
@@ -24,7 +31,28 @@ public class SceneChanger : MonoBehaviour
         //have the next channel value wrap around
         if (next_channel <= -1) { next_channel = channels.Length; }
         else if (next_channel >= channels.Length) { next_channel = 0; }
+    }
 
-        
+    public void OpenOrCloseMenu()
+    {
+        print("Here");
+        if (paused == false)
+        {
+            paused = true;
+
+            //stop time
+            Time.timeScale = 0f;
+
+            Menu.SetActive(true);
+        }
+        else
+        {
+            paused = false;
+
+            //restart time
+            Time.timeScale = 1f;
+
+            Menu.SetActive(false);
+        }
     }
 }
