@@ -4851,7 +4851,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.725
+  m_Radius: 1
   m_Height: 3.4500008
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -4867,4 +4867,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 642b90784466cea469821f50b561d604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: {fileID: 0}
+  channels: 
+  Menu: {fileID: 0}

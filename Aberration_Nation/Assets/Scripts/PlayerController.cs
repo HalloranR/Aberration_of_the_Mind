@@ -32,6 +32,12 @@ public class PlayerController : MonoBehaviour
     [Header("Menu Location")]
     public GameObject Menu;
 
+    [Header("Shooter Mechanics")]
+    public GameObject bullet_prefab;
+    public GameObject gun;
+    public float fireRate = 2f;
+    public float bulletSpeed = 10f;
+
     [Header("Ground Detection")]
     public LayerMask groundMask;
     public float sphereRadius;
@@ -48,6 +54,7 @@ public class PlayerController : MonoBehaviour
     private bool grounded = true;
     private float changeX;
     private float changeY;
+    private float readyTime = 0;
 
 
     //enable and disable unity new input system
@@ -68,6 +75,14 @@ public class PlayerController : MonoBehaviour
         rb.velocity = velocity;
         //rb.rotation = rotation;
 
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            gun.SetActive(true);
+        }
+        else
+        {
+            gun.SetActive(false);
+        }
         rb.position = location;
     }
 
@@ -81,6 +96,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (readyTime != 0)
+        {
+            readyTime -= Time.deltaTime;
+        }
+
         grounded = Physics.CheckSphere(rb.position, sphereRadius, groundMask);
 
         //Debug.Log("Position: " + rb.position.ToString());
@@ -133,7 +153,16 @@ public class PlayerController : MonoBehaviour
 
     public void FireGun()
     {
+        if (readyTime <= 0)
+        {
+            readyTime = fireRate;
 
+            GameObject bullet = Instantiate(bullet_prefab, transform.position + transform.forward * 2, Quaternion.identity);
+
+            //bullet.transform.Rotate(90, 0, 0);
+
+            bullet.GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed;
+        }
     }
     
 
@@ -221,9 +250,9 @@ public class PlayerController : MonoBehaviour
         Debug.Log("JUmp");
         if(paused == false)
         {
-            if (SceneManager.GetActiveScene().buildIndex == 2) { Jump();  }
-            else if (SceneManager.GetActiveScene().buildIndex == 3) { }
-            else if (SceneManager.GetActiveScene().buildIndex == 4) { }
+            if (SceneManager.GetActiveScene().buildIndex == 2) { FireGun();  }
+            else if (SceneManager.GetActiveScene().buildIndex == 3) { Jump(); }
+            else if (SceneManager.GetActiveScene().buildIndex == 4) { Sprint();  }
         }
     }
 

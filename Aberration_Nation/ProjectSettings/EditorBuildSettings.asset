@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ToonTownScene.unity
     guid: 9d7de89a8be794e409ecc59a22c850b6
+  - enabled: 1
+    path: Assets/Scenes/CreditsScene.unity
+    guid: 7aed9ca25aa19e541b5fd6ac780cf85a
   m_configObjects: {}

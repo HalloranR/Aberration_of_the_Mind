@@ -55,4 +55,13 @@ public class SceneChanger : MonoBehaviour
             Menu.SetActive(false);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            SceneManager.LoadScene(4);
+        }
+    }
+
 }
