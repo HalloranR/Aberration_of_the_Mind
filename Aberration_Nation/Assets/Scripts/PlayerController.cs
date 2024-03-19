@@ -159,7 +159,10 @@ public class PlayerController : MonoBehaviour
 
             GameObject bullet = Instantiate(bullet_prefab, transform.position + transform.forward * 2, Quaternion.identity);
 
-            //bullet.transform.Rotate(90, 0, 0);
+            //try to get the bullet to face yur direction
+            bullet.GetComponent<Rigidbody>().rotation = rb.rotation;
+
+            bullet.transfor.rotate
 
             bullet.GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed;
         }
@@ -225,6 +228,8 @@ public class PlayerController : MonoBehaviour
         if (paused == false)
         {
             location = rb.position;
+
+            velocity = rb.velocity;
 
             int value = 0;
             if (context.ReadValue<float>() > 0) { value = 1; }
